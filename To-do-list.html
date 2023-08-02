@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>To-Do List</title>
+</head>
+<body>
+    <h1>To-Do List</h1>
+    <input type="text" id="newItem" placeholder="Enter new item...">
+    <button onclick="addItem()">Add Item</button>
+    <ul id="todoList"></ul>
+
+    <script>
+        // Initialize an array to store the to-do items
+        let todoItems = [];
+
+        // Function to add a new item to the list
+        function addItem() {
+            const newItemInput = document.getElementById("newItem");
+            const newItemText = newItemInput.value.trim();
+            if (newItemText === "") {
+                alert("Please enter a valid item!");
+                return;
+            }
+
+            const newItem = {
+                text: newItemText,
+                done: false
+            };
+
+            todoItems.push(newItem);
+            updateList();
+            newItemInput.value = "";
+        }
+
+        // Function to toggle the 'done' status of an item
+        function toggleDone(index) {
+            todoItems[index].done = !todoItems[index].done;
+            updateList();
+        }
+
+        // Function to remove an item from the list
+        function removeItem(index) {
+            todoItems.splice(index, 1);
+            updateList();
+        }
+
+        // Function to update the displayed list
+        function updateList() {
+            const todoList = document.getElementById("todoList");
+            todoList.innerHTML = "";
+
+            todoItems.forEach((item, index) => {
+                const listItem = document.createElement("li");
+                const textSpan = document.createElement("span");
+                textSpan.innerText = item.text;
+
+                const doneButton = document.createElement("button");
+                doneButton.innerText = item.done ? "Undo" : "Done";
+                doneButton.onclick = () => toggleDone(index);
+
+                const removeButton = document.createElement("button");
+                removeButton.innerText = "Remove";
+                removeButton.onclick = () => removeItem(index);
+
+                listItem.appendChild(textSpan);
+                listItem.appendChild(doneButton);
+                listItem.appendChild(removeButton);
+
+                if (item.done) {
+                    listItem.style.textDecoration = "line-through";
+                }
+
+                todoList.appendChild(listItem);
+            });
+        }
+    </script>
+</body>
+</html>
